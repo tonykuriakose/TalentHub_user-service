@@ -1,10 +1,15 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import express, { Application } from 'express';
+import { config } from "dotenv";
 
-const app: Application = express();
-const PORT = process.env.EXPRESS_PORT || '3001';
+config();
 
-app.listen(PORT, () => {
-    console.log(`server running at${PORT}`);
-});
+import Server from "./app/express";
+
+const expessServer = new Server();
+
+const PORT = process.env.PORT || 3001;
+
+expessServer.start(PORT);
+
+
+
+

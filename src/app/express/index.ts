@@ -1,20 +1,41 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from "express";
+
 
 class Server {
-    public app: Application;
-    private server: any;
-
-    constructor() {
-        this.app = express();
-    }
+ public app: Application;
+ private server: any;
 
 
-    start(PORT: string) {
-        this.server = this.app.listen(PORT, () => {
-            console.log("Server running");
-            ;
-        });
-    }
+ constructor() {
+   this.app = express();
+   this.initialize();
+   this.setupRoutes();
+ }
+
+
+ async initialize() {
+   try {
+     console.log("Initializing server");
+   } catch (error) {
+     console.error("Error during initialization", error);
+   }
+ }
+
+
+  private setupRoutes() {
+   this.app.get("/", (req: Request, res: Response) => {
+     res.status(200).json({ message: "User API is working fine!" });
+   });
+ }
+
+
+ start(PORT: string | number) {
+   this.server = this.app.listen(PORT, () => {
+     console.log(`User Server running on ${PORT}`);
+   });
+ }
 }
 
+
 export default Server;
+
