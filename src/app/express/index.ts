@@ -34,6 +34,21 @@ class Server {
      console.log(`User Server running on ${PORT}`);
    });
  }
+
+ stop() {
+  try {
+    if (this.server) {
+      this.server.close(() => {
+        console.log("Server shutdown");
+      });
+    }
+  } catch (error) {
+    console.error("Error during shutdown", error);
+  }
+}
+
+
+ 
 }
 
 

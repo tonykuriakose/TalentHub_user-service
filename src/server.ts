@@ -1,26 +1,33 @@
-import { config } from "dotenv";
-config();
-import Database from "./core/database";
-import {checkEnvVariables} from "@talenthub/services/shared-library/service-common/dist/utils";
-import Server from "./app/express";
-const expessServer = new Server();
+import 'reflect-metadata';
+import dotenv from 'dotenv';
+dotenv.config();
 
+import ExpressServer from './app/express';
+import Database from './core/database';
 
+(async () => {
 
+    
+    const databaseUrl = process.env.DATABASE_URL!;
+    const expressPort = process.env.EXPRESS_PORT || '3001';
 
-const databaseUrl = process.env.DATABASE_URL;
+    const db = new Database(databaseUrl);
+    db.connect();
+    
+    const expressServer = new ExpressServer();
+    expressServer.start(expressPort);
+  
 
-
-
-
-
-
-
-
-const PORT = process.env.PORT || 3001;
-
-expessServer.start(PORT);
-
-
+    process.on('SIGINT', async () => {
+        expressServer.stop()
+        db.disconnect();
+     
+    });
+    process.on("SIGTERM", () => {
+        expressServer.stop()
+        db.disconnect();
+     
+    });
+})();
 
 
